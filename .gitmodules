@@ -1,3 +1,6 @@
 [submodule "modules/json"]
 	path = modules/json
 	url = https://github.com/flowroute/kamailio-json-module.git
+[submodule "modules/jsonrpc-c"]
+	path = modules/jsonrpc-c
+	url = https://github.com/flowroute/kamailio-jsonrpc-module.git
