@@ -4,3 +4,6 @@
 [submodule "modules/jsonrpc-c"]
 	path = modules/jsonrpc-c
 	url = https://github.com/flowroute/kamailio-jsonrpc-module.git
+[submodule "modules/db_jsonrpc"]
+	path = modules/db_jsonrpc
+	url = https://github.com/flowroute/kamailio-db_jsonrpc.git
