@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# System Requirements:
+# sudo apt-get install libevent bison flex libjansson-dev libevent-dev libxml2-dev libpcre3-dev libpq-dev
+
 #export INCLUDED_MODULES="siputils xmlrpc json jsonrpc-c"
 export CC_EXTRA_OPTS="-g -O0"
 export INCLUDED_MODULES="siputils xmlrpc json jsonrpc-c"
