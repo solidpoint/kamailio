@@ -972,6 +972,11 @@ void free_faked_req(struct sip_msg *faked_req, struct cell *t)
 			faked_req->body->free(&faked_req->body);
 		faked_req->body = 0;
 	}
+
+	if (faked_req->path_vec.s) {
+		pkg_free(faked_req->path_vec.s);
+		faked_req->path_vec.len=0;
+	}
 }
 
 
