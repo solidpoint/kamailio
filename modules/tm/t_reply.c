@@ -888,6 +888,8 @@ int fake_req(struct sip_msg *faked_req,
 	/* msg->parsed_uri_ok must be reset since msg_parsed_uri is
 	 * not cloned (and cannot be cloned) */
 	faked_req->parsed_uri_ok = 0;
+
+	faked_req->path_vec.s = 0;
 	
 	faked_req->msg_flags|=extra_flags; /* set the extra tm flags */
 
