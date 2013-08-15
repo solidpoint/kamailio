@@ -889,8 +889,6 @@ int fake_req(struct sip_msg *faked_req,
 	 * not cloned (and cannot be cloned) */
 	faked_req->parsed_uri_ok = 0;
 
-	faked_req->path_vec.s = 0;
-	
 	faked_req->msg_flags|=extra_flags; /* set the extra tm flags */
 
 	/* dst_uri can change ALSO!!! -- make a private copy */
@@ -922,6 +920,22 @@ int fake_req(struct sip_msg *faked_req,
 	}else{
 		/* in case len==0, but shmem_msg->new_uri.s!=0  (extra safety)*/
 		faked_req->new_uri.s = 0;
+	}
+	/* path_vec can change -- make a private copy */
+	if (shmem_msg->path_vec.s!=0 && shmem_msg->path_vec.len!=0) {
+		faked_req->path_vec.s=pkg_malloc(shmem_msg->path_vec.len+1);
+		if (!faked_req->path_vec.s) {
+			LOG(L_ERR, "ERROR: fake_req: no path_vec/pkg mem\n");
+			goto error00;
+		}
+		faked_req->path_vec.len=shmem_msg->path_vec.len;
+		memcpy( faked_req->path_vec.s, shmem_msg->path_vec.s,
+			faked_req->path_vec.len);
+		faked_req->path_vec.s[faked_req->path_vec.len]=0;
+	}else{
+		/* in case len==0, but shmem_msg->path_vec.s!=0  (extra safety)*/
+		faked_req->path_vec.s = 0;
+		faked_req->path_vec.len = 0;
 	}
 	if(uac) setbflagsval(0, uac->branch_flags);
 	else setbflagsval(0, 0);
