@@ -43,14 +43,36 @@
  * need to make a zero-terminated copy of it. 
  *
  * @section drawbacks Drawbacks 
- * Note well that the fact that string stored
- * using this data structure are not zero terminated makes them a little
- * incovenient to use with many standard libc string functions, because these
- * usually expect the input to be zero-terminated. In this case you have to
- * either make a zero-terminated copy or inject the terminating zero behind
- * the actuall string (if possible). Note that injecting a zero terminating
- * characters is considered to be dangerous.
- */
+ * Note that because strings stored using this data structure are not zero terminated, 
+ * it makes them inconvenient to use with many standard libc string functions, which
+ * expect zero-terminated strings as arguments. To adapt _str strings to null-terminated 
+ * strings, one either has to make a zero-terminated copy, or inject the terminating 
+ * zero behind the _str.s string. Injecting a zero terminating zero may overwrite
+ * characters from another sub-string in a large buffer, and is therefore dangerous.
+ * 
+ * Since no string in kamalio is likely to be of size int, whether 32 or 64 bits,
+ * a solution is ready at hand. The int could be replaced with 2 short ints, one
+ * which serves the same purpose, and the other which would hold the actual amount 
+ * of storage allocated. 
+ * 
+ * In cases where _str.s is a pointer into a large string to provide access to a
+ * sub-stirng of interest, these two short ints  would have the same value. Where
+ * larger, perhaps working buffers of the szTemp[arbitrarily_large] are allocated,
+ * the 2nd short int would equal sizeof(szTemp). The user could then test to 
+ * discover whether they could safely modify _str.s in a way that requires more
+ * storage than _str.len indicates, or not. Unsigned shorts are proposed, as I 
+ * have yet to encounter a string with a negative size.
+ * 
+ * The following struct is proposed
+ * 
+ * struct _safestr {
+ *      char* s;
+ * 	unsigned short len;
+ *      unsigned short store_sz;
+ * }
+ }
+ * 
+  */
 
 /** @file 
  * This header field defines the ::str data structure that is used across
